@@ -1,0 +1,84 @@
+class Email{
+    Header header ;
+    String body;
+    String greetings;
+    Email(String greetings){
+        this.greetings=greetings;
+    }
+
+    public Email(Header header, String body, String greetings) {
+        this.header = header;
+        this.body = body;
+        this.greetings = greetings;
+    }
+}
+class Header{
+    String from ;
+    String to ;
+    Header(String from, String to ){
+        this.from = from ;
+        this.to = to;
+    }
+}
+
+
+class EmailOperations{
+    public int emailVerify(Email e){
+        Pattern p = Pattern.compile("^[_a-zA-Z][\\w]+[@]{1}[a-zA-Z]+[\\.]{1}[a-z]+");
+        Matcher from = p.matcher(e.header.from);
+        Matcher to = p.matcher(e.header.to);
+       if(from.find()==true&& to.find()==true)
+           return 2;
+      if((from.find()==false)&&(to.find()==false))
+          return 0;
+      else
+          return 1;
+    }
+    public String bodyEncryption(Email e){
+     String news = "";
+     String input = e.body;
+     for(int i = 0 ; i <e.body.length();i++){
+         if(input.charAt(i)==' '){
+             news+=" ";
+         }
+         if(Character.isUpperCase(input.charAt(i))){
+             int check=(int)(input.charAt(i)+3);
+             if(check>90){
+                 check=check-91;
+                 news+=(char)(65+check);
+             }
+             else
+                 news+=(char)(check);
+         }
+         if(Character.isLowerCase(input.charAt(i))){
+             int check=(int)(input.charAt(i)+3);
+             if(check>122){
+                 check=check-123;
+                 news+=(char)(97+check);
+             }
+             else
+                 news+=(char)(check);
+         }
+
+
+     }
+        return news;
+    }
+    public String greetingMessage(Email e){
+        String [] name = e.header.from.split("@");
+        return e.greetings+" "+name[0];
+
+    }
+}
+public class Source{
+    public static void main(String[] args) {
+        EmailOperations eo = new EmailOperations();
+
+        Email e = new Email(new Header("amit@doselect.in","amit@doselect.in"),"Hi There Hows you","Regards");
+        System.out.println( eo.emailVerify(e));
+        System.out.println(eo.bodyEncryption(e));
+        System.out.println(eo.greetingMessage(e));
+
+
+    }
+}
